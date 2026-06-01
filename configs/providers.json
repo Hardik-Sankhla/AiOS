@@ -3,35 +3,150 @@
     "groq": {
       "enabled": true,
       "type": "groq",
-      "api_key": "${GROQ_API_KEY}"
+      "api_key": "${GROQ_API_KEY}",
+      "models": [
+        "mixtral-8x7b-32768",
+        "gemma-7b-it",
+        "llama2-70b-4096"
+      ],
+      "rate_limit": {
+        "rpm": 60,
+        "tpm": 10000
+      }
     },
-    "together": {
+    "gemini": {
       "enabled": true,
-      "type": "together",
-      "api_key": "${TOGETHER_API_KEY}"
+      "type": "gemini",
+      "api_key": "${GOOGLE_API_KEY}",
+      "base_url": "https://generativelanguage.googleapis.com/v1beta",
+      "models": [
+        "gemini-pro",
+        "gemini-pro-vision"
+      ],
+      "rate_limit": {
+        "rpm": 60,
+        "tpm": 4000000
+      }
     },
     "openrouter": {
       "enabled": true,
       "type": "openrouter",
-      "api_key": "${OPENROUTER_API_KEY}"
+      "api_key": "${OPENROUTER_API_KEY}",
+      "base_url": "https://openrouter.ai/api/v1",
+      "models": [
+        "mistralai/mistral-7b-instruct",
+        "meta-llama/llama-2-70b-chat",
+        "openai/gpt-3.5-turbo"
+      ],
+      "rate_limit": {
+        "rpm": 60,
+        "tpm": 100000
+      }
     },
-    "local": {
+    "together": {
+      "enabled": true,
+      "type": "together",
+      "api_key": "${TOGETHER_API_KEY}",
+      "base_url": "https://api.together.xyz/v1",
+      "models": [
+        "meta-llama/Llama-2-70b-chat-hf",
+        "mistralai/Mixtral-8x7B-Instruct-v0.1"
+      ],
+      "rate_limit": {
+        "rpm": 60,
+        "tpm": 100000
+      }
+    },
+    "cerebras": {
+      "enabled": false,
+      "type": "cerebras",
+      "api_key": "${CEREBRAS_API_KEY}",
+      "base_url": "https://api.cerebras.ai/v1",
+      "models": [
+        "llama2-13b",
+        "llama2-70b"
+      ]
+    },
+    "sambanova": {
+      "enabled": false,
+      "type": "sambanova",
+      "api_key": "${SAMBANOVA_API_KEY}",
+      "base_url": "https://api.sambanova.ai/v1",
+      "models": [
+        "meta-llama/Llama-2-7b-hf",
+        "meta-llama/Llama-2-13b-hf"
+      ]
+    },
+    "github_models": {
+      "enabled": false,
+      "type": "github-models",
+      "api_key": "${GITHUB_TOKEN}",
+      "base_url": "https://models.inference.ai.azure.com",
+      "models": [
+        "gpt-4-turbo",
+        "gpt-4",
+        "llama-2-7b"
+      ]
+    },
+    "ollama": {
       "enabled": false,
       "type": "openai-compatible",
-      "base_url": "http://localhost:8000/v1",
-      "api_key": "",
+      "base_url": "http://localhost:11434/v1",
+      "api_key": "ollama",
       "models": [
         "llama2",
         "mistral",
-        "neural-chat"
+        "neural-chat",
+        "dolphin-mixtral",
+        "phind-codellama"
+      ]
+    },
+    "lm_studio": {
+      "enabled": false,
+      "type": "openai-compatible",
+      "base_url": "http://localhost:1234/v1",
+      "api_key": "lm-studio",
+      "models": [
+        "local-model"
+      ]
+    },
+    "vllm": {
+      "enabled": false,
+      "type": "openai-compatible",
+      "base_url": "http://localhost:8000/v1",
+      "api_key": "vllm",
+      "models": [
+        "meta-llama/Llama-2-7b-hf",
+        "mistralai/Mistral-7B-v0.1"
+      ]
+    },
+    "freellmapi": {
+      "enabled": false,
+      "type": "openai-compatible",
+      "base_url": "http://localhost:8001/v1",
+      "api_key": "freellmapi",
+      "description": "FreeLLMAPI aggregator (https://github.com/tashfeenahmed/freellmapi)",
+      "models": [
+        "auto"
       ]
     }
   },
   "fallback_order": [
     "groq",
-    "together",
     "openrouter",
-    "local"
+    "together",
+    "gemini",
+    "ollama",
+    "freellmapi"
   ],
-  "default_model": "auto"
+  "default_model": "auto",
+  "health_check": {
+    "enabled": true,
+    "timeout_seconds": 5,
+    "interval_seconds": 300
+  },
+  "rate_limiting": {
+    "enabled": true,
+    "cleanup_interval_seconds": 60
+  }
 }
