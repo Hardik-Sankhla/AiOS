@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # FastAPI WebUI Service
+  webui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aios-webui
+    command: python -m uvicorn webui.app:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - TOGETHER_API_KEY=${TOGETHER_API_KEY}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./logs:/app/logs
+      - ./webui:/app/webui
+      - ./agents:/app/agents
+      - ./services:/app/services
+      - ./configs:/app/configs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - aios-network
+    labels:
+      - "com.aios.service=webui"
+      - "com.aios.description=FastAPI WebUI Dashboard"
+
+  # Telegram Bot Service
+  telegram-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aios-telegram-bot
+    command: python -m bot_service
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - TOGETHER_API_KEY=${TOGETHER_API_KEY}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./logs:/app/logs
+      - ./bot_service:/app/bot_service
+      - ./agents:/app/agents
+      - ./services:/app/services
+      - ./configs:/app/configs
+    restart: unless-stopped
+    depends_on:
+      webui:
+        condition: service_healthy
+    networks:
+      - aios-network
+    labels:
+      - "com.aios.service=telegram-bot"
+      - "com.aios.description=Telegram Bot Handler"
+
+networks:
+  aios-network:
+    driver: bridge
+
+volumes:
+  logs:
+    driver: local
+

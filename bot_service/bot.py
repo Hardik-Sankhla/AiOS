@@ -249,12 +249,15 @@ async def main():
         bot.setup_handlers(app)
         
         # Start polling
+        logger.info("Bot polling started - ready to receive messages")
         await app.run_polling()
     
     except ImportError:
         logger.error("python-telegram-bot not installed. Install with: pip install python-telegram-bot")
+    except KeyboardInterrupt:
+        logger.info("Bot interrupted by user")
     except Exception as e:
-        logger.error(f"Bot error: {e}")
+        logger.error(f"Bot error: {type(e).__name__}: {e}")
 
 
 if __name__ == "__main__":
