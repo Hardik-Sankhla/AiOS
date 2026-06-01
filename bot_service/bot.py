@@ -5,10 +5,11 @@ import asyncio
 import logging
 from typing import Optional
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Note: This is a template. Requires: pip install python-telegram-bot
-# from telegram import Update, BotCommand, MenuButton
-# from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
+from telegram import Update, BotCommand, MenuButton
+from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -229,6 +230,7 @@ Your message: _{user_message}_
 
 async def main():
     """Main bot execution (requires python-telegram-bot)."""
+    load_dotenv()
     token = os.getenv("TELEGRAM_BOT_TOKEN")
     if not token:
         logger.error("TELEGRAM_BOT_TOKEN not set in .env")
