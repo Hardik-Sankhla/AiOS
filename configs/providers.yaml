@@ -1,0 +1,44 @@
+# AIOS Free LLM Provider Configuration
+# Supports: Groq, Together AI, OpenRouter, local OpenAI-compatible endpoints
+
+providers:
+  # Groq: Fast inference with Llama and Mixtral models
+  groq:
+    enabled: true
+    type: groq
+    api_key: ${GROQ_API_KEY}
+    
+  # Together AI: Open-source model access
+  together:
+    enabled: true
+    type: together
+    api_key: ${TOGETHER_API_KEY}
+    
+  # OpenRouter: Aggregates multiple free-tier models
+  openrouter:
+    enabled: true
+    type: openrouter
+    api_key: ${OPENROUTER_API_KEY}
+    
+  # Local Ollama or LM Studio (OpenAI-compatible endpoint)
+  local:
+    enabled: false  # Set to true if running local LLM server
+    type: openai-compatible
+    base_url: http://localhost:8000/v1
+    api_key: ""  # Leave empty for local endpoints
+    models:
+      - llama2
+      - mistral
+      - neural-chat
+
+# Provider priority order (first available is used)
+fallback_order:
+  - groq
+  - together
+  - openrouter
+  - local
+
+# Default model behavior
+# "auto" = use first available from fallback_order
+# "specific_model_name" = request specific model
+default_model: auto

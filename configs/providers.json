@@ -1,0 +1,37 @@
+{
+  "providers": {
+    "groq": {
+      "enabled": true,
+      "type": "groq",
+      "api_key": "${GROQ_API_KEY}"
+    },
+    "together": {
+      "enabled": true,
+      "type": "together",
+      "api_key": "${TOGETHER_API_KEY}"
+    },
+    "openrouter": {
+      "enabled": true,
+      "type": "openrouter",
+      "api_key": "${OPENROUTER_API_KEY}"
+    },
+    "local": {
+      "enabled": false,
+      "type": "openai-compatible",
+      "base_url": "http://localhost:8000/v1",
+      "api_key": "",
+      "models": [
+        "llama2",
+        "mistral",
+        "neural-chat"
+      ]
+    }
+  },
+  "fallback_order": [
+    "groq",
+    "together",
+    "openrouter",
+    "local"
+  ],
+  "default_model": "auto"
+}
