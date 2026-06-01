@@ -16,7 +16,7 @@ cat .env | grep TELEGRAM_BOT_TOKEN
 pip install 'python-telegram-bot>=20.0'
 
 # 3. Start bot
-python -m telegram.bot
+python -m bot_service
 ```
 
 ---

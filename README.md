@@ -64,7 +64,7 @@ python -m uvicorn webui.app:app --host 0.0.0.0 --port 8000
 **Telegram Bot** (optional):
 ```bash
 export TELEGRAM_BOT_TOKEN="your_bot_token"
-python -m telegram.bot
+python -m bot_service
 ```
 
 ---
@@ -365,7 +365,7 @@ Edit `configs/providers.json`:
 export TELEGRAM_BOT_TOKEN="123456789:ABCdefGHIjklmnopQRSTUvwxyz"
 
 # 4. Run bot
-python -m telegram.bot
+python -m bot_service
 ```
 
 ---
@@ -394,7 +394,7 @@ python -m uvicorn webui.app:app --reload --host 0.0.0.0 --port 8000
 
 **Start Bot**:
 ```bash
-TELEGRAM_BOT_TOKEN="your_token" python -m telegram.bot
+TELEGRAM_BOT_TOKEN="your_token" python -m bot_service
 ```
 
 **Commands**:

@@ -30,7 +30,7 @@ python -m uvicorn webui.app:app --host 0.0.0.0 --port 8000
 ### Start Telegram Bot
 ```bash
 cd /storage/emulated/0/projects/aios
-python -m telegram.bot
+python -m bot_service
 ```
 
 ---
@@ -136,19 +136,19 @@ kill <PID>
 ### Start Bot (Foreground)
 ```bash
 cd /storage/emulated/0/projects/aios
-python -m telegram.bot
+python -m bot_service
 ```
 
 ### Start Bot (Background)
 ```bash
 cd /storage/emulated/0/projects/aios
-nohup python -m telegram.bot > telegram.log 2>&1 &
+nohup python -m bot_service > telegram.log 2>&1 &
 ```
 
 ### Start Bot with Debug
 ```bash
 cd /storage/emulated/0/projects/aios
-TELEGRAM_DEBUG=true python -m telegram.bot
+TELEGRAM_DEBUG=true python -m bot_service
 ```
 
 ### Using Launcher Script
@@ -322,7 +322,7 @@ python -m uvicorn webui.app:app --host 0.0.0.0 --port 8000 > webui.log 2>&1 &
 echo "WebUI started"
 
 # Bot
-python -m telegram.bot > telegram.log 2>&1 &
+python -m bot_service > telegram.log 2>&1 &
 echo "Bot started"
 
 # Show status
@@ -343,7 +343,7 @@ pytest tests/ -v
 echo ""
 echo "Tests complete. Starting services..."
 python -m uvicorn webui.app:app --host 0.0.0.0 --port 8000 > webui.log 2>&1 &
-python -m telegram.bot > telegram.log 2>&1 &
+python -m bot_service > telegram.log 2>&1 &
 echo "Services started"
 ```
 
@@ -366,7 +366,7 @@ sleep 2
 
 # 4. Start Bot
 echo "Step 4: Starting Telegram Bot..."
-python -m telegram.bot > telegram.log 2>&1 &
+python -m bot_service > telegram.log 2>&1 &
 
 # 5. Show status
 echo -e "\n✅ All systems running"
@@ -578,7 +578,7 @@ python -m uvicorn webui.app:app --port 8001
 ```bash
 # Add to PYTHONPATH
 export PYTHONPATH=/storage/emulated/0/projects/aios:$PYTHONPATH
-python -m telegram.bot
+python -m bot_service
 ```
 
 ### Bot Not Responding
@@ -591,7 +591,7 @@ curl -X POST https://api.telegram.org/botTOKEN/getMe
 
 # Restart bot
 pkill -f "python.*telegram.bot"
-python -m telegram.bot
+python -m bot_service
 ```
 
 ### Dependencies Missing
@@ -614,7 +614,7 @@ cd /storage/emulated/0/projects/aios
 python -m uvicorn webui.app:app --host 0.0.0.0 --port 8000
 
 # 4. Start Bot (new terminal)
-python -m telegram.bot
+python -m bot_service
 
 # 5. Run tests
 pytest tests/ -v

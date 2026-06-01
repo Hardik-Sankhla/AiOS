@@ -136,7 +136,7 @@ TESTEOF
         print_info "Bot will start and begin polling for messages"
         print_info "Send /start to your bot in Telegram to test"
         echo ""
-        python -m telegram.bot
+        python -m bot_service
         ;;
 
     4)
@@ -147,7 +147,7 @@ TESTEOF
         echo "  python -m uvicorn webui.app:app --host 0.0.0.0 --port 8000"
         echo ""
         print_info "Terminal 2: Telegram Bot"
-        echo "  python -m telegram.bot"
+        echo "  python -m bot_service"
         echo ""
         read -p "Press Enter to start WebUI in background, then start bot in foreground..."
         
@@ -159,7 +159,7 @@ TESTEOF
         sleep 2
         
         print_section "NOW STARTING TELEGRAM BOT"
-        python -m telegram.bot
+        python -m bot_service
         
         echo ""
         print_info "Stopping WebUI..."
@@ -172,7 +172,7 @@ TESTEOF
         python -m uvicorn webui.app:app --host 0.0.0.0 --port 8000 > webui.log 2>&1 &
         WEBUI_PID=$!
         
-        python -m telegram.bot > telegram.log 2>&1 &
+        python -m bot_service > telegram.log 2>&1 &
         BOT_PID=$!
         
         print_status "WebUI started (PID: $WEBUI_PID, Log: webui.log)"
