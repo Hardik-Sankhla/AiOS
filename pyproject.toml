@@ -23,4 +23,4 @@ dev = [
 ]
 
 [tool.uv]
-python-version = "3.13"
+managed = true
