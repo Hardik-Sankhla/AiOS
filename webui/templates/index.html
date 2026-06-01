@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }} - AIOS Agent Interface</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        nav {
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            padding: 15px 30px;
+            display: flex;
+            gap: 20px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 500;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        nav a:hover {
+            background: #e9ecef;
+            color: #764ba2;
+        }
+        nav a.active {
+            background: #667eea;
+            color: white;
+        }
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        .sidebar {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            height: fit-content;
+        }
+        .sidebar h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar li {
+            margin: 8px 0;
+        }
+        .sidebar button {
+            width: 100%;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .sidebar button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .main-content {
+            background: white;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .chat-messages {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+        .user-message {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            text-align: right;
+        }
+        .agent-message {
+            background: #f0f0f0;
+            border-left: 4px solid #764ba2;
+        }
+        .timestamp {
+            font-size: 0.85em;
+            color: #999;
+            margin-right: 10px;
+        }
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        .chat-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .chat-input button {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .chat-input button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .status-panel {
+            background: #f0f7ff;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .status-panel h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .status-panel ul {
+            list-style: none;
+        }
+        .status-panel li {
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .status-panel li:last-child {
+            border-bottom: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            nav {
+                flex-wrap: wrap;
+            }
+        }
+        .htmx-swapping {
+            opacity: 1;
+            transition: opacity 0.2s ease-out;
+        }
+        .htmx-settling {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 {{ app_name }}</h1>
+            <p>Agent Orchestration Interface - v{{ version }}</p>
+        </header>
+        
+        <nav>
+            <a hx-get="/api/agents" hx-target="#main" class="active">Agents</a>
+            <a hx-get="/api/providers" hx-target="#main">Providers</a>
+            <a hx-get="/api/status" hx-target="#status">Status</a>
+            <a href="/docs">API Docs</a>
+        </nav>
+        
+        <div class="content">
+            <div class="sidebar">
+                <h3>Available Agents</h3>
+                <ul id="agent-list">
+                    <li>
+                        <button hx-post="/api/chat" hx-target="#messages">
+                            🔍 Research Agent
+                        </button>
+                    </li>
+                    <li>
+                        <button hx-post="/api/chat" hx-target="#messages">
+                            💻 Coding Agent
+                        </button>
+                    </li>
+                </ul>
+                <div id="status" hx-trigger="load" hx-get="/api/status"></div>
+            </div>
+            
+            <div class="main-content" id="main">
+                <div class="chat-container">
+                    <h2>Chat with Agents</h2>
+                    <div class="chat-messages" id="messages">
+                        <div class="message agent-message">
+                            <span class="timestamp">00:00:00</span>
+                            <p><strong>System:</strong> Welcome to Hermes AIOS! Select an agent and start chatting.</p>
+                        </div>
+                    </div>
+                    
+                    <form hx-post="/api/chat" hx-target="#messages" hx-swap="beforeend" class="chat-input">
+                        <input 
+                            type="text" 
+                            name="message" 
+                            placeholder="Type your message here..."
+                            required
+                            autofocus
+                        >
+                        <input type="hidden" name="agent" value="research_agent">
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

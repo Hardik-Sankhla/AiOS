@@ -1,0 +1,94 @@
+<h2>LLM Providers</h2>
+<div class="providers-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Provider</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Models</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for provider in providers %}
+            <tr class="{% if provider.enabled %}enabled{% else %}disabled{% endif %}">
+                <td><strong>{{ provider.name }}</strong></td>
+                <td>{{ provider.type }}</td>
+                <td>
+                    <span class="status {% if provider.enabled %}active{% else %}inactive{% endif %}">
+                        {{ 'Enabled' if provider.enabled else 'Disabled' }}
+                    </span>
+                </td>
+                <td>
+                    <span class="models">
+                        {% for model in provider.models[:2] %}
+                            <code>{{ model }}</code>
+                            {% if not loop.last %}<br>{% endif %}
+                        {% endfor %}
+                        {% if provider.models|length > 2 %}
+                            <br><small>+{{ provider.models|length - 2 }} more</small>
+                        {% endif %}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .providers-table {
+        margin-top: 20px;
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    thead {
+        background: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+    th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #667eea;
+    }
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #dee2e6;
+    }
+    tr.enabled {
+        background: rgba(102, 126, 234, 0.05);
+    }
+    tr.disabled {
+        background: rgba(200, 200, 200, 0.1);
+        opacity: 0.7;
+    }
+    .status {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 600;
+    }
+    .status.active {
+        background: #d4edda;
+        color: #155724;
+    }
+    .status.inactive {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    code {
+        background: #f8f9fa;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 0.85em;
+    }
+</style>
